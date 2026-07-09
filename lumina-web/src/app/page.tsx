@@ -8,16 +8,20 @@ import LendingProtocol from "@/components/LendingProtocol";
 import CareerShield from "@/components/CareerShield";
 import MentorshipSandbox from "@/components/MentorshipSandbox";
 import Footer from "@/components/Footer";
+import GlobalBackground from "@/components/GlobalBackground";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function Home() {
   const [activeTab, setActiveTab] = useState("home");
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#090a0f] text-[#f1f5f9] selection:bg-indigo-600 selection:text-white relative">
+    <div className="min-h-screen flex flex-col text-[#f8fafc] selection:bg-indigo-600 selection:text-white relative overflow-x-hidden">
+      {/* Global Interactive Constellation Canvas & Aurora Mesh (Active continuously on EVERY tab & section!) */}
+      <GlobalBackground />
+
       <Navbar activeTab={activeTab} setActiveTab={setActiveTab} />
 
-      <main className="flex-grow">
+      <main className="flex-grow relative z-10">
         <AnimatePresence mode="wait">
           {activeTab === "home" && (
             <motion.div
@@ -81,7 +85,12 @@ export default function Home() {
         </AnimatePresence>
       </main>
 
-      <Footer />
+      {/* Footer ONLY visible on landing page (Overview / home tab) */}
+      {activeTab === "home" && (
+        <div className="relative z-10">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }
