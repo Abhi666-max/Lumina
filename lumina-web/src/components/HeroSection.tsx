@@ -1,188 +1,45 @@
 "use client";
 
-import React, { useEffect, useRef } from "react";
-import { Zap, Shield, Terminal, ArrowRight, CheckCircle } from "lucide-react";
+import React from "react";
+import { Zap, Shield, Terminal, ArrowRight, CheckCircle, Activity, Lock, Cpu } from "lucide-react";
 import { motion } from "framer-motion";
 
 interface HeroSectionProps {
   setActiveTab: (tab: string) => void;
 }
 
-interface Node {
-  x: number;
-  y: number;
-  vx: number;
-  vy: number;
-  radius: number;
-  color: string;
-}
-
 export default function HeroSection({ setActiveTab }: HeroSectionProps) {
-  const canvasRef = useRef<HTMLCanvasElement | null>(null);
-
-  useEffect(() => {
-    const canvas = canvasRef.current;
-    if (!canvas) return;
-    const ctx = canvas.getContext("2d");
-    if (!ctx) return;
-
-    let animationFrameId: number;
-    let width = (canvas.width = window.innerWidth);
-    let height = (canvas.height = window.innerHeight);
-
-    const handleResize = () => {
-      if (!canvas) return;
-      width = canvas.width = window.innerWidth;
-      height = canvas.height = window.innerHeight;
-    };
-    window.addEventListener("resize", handleResize);
-
-    // Mouse telemetry interaction
-    const mouse = { x: -1000, y: -1000, radius: 180 };
-    const handleMouseMove = (e: MouseEvent) => {
-      const rect = canvas.getBoundingClientRect();
-      mouse.x = e.clientX - rect.left;
-      mouse.y = e.clientY - rect.top;
-    };
-    const handleMouseLeave = () => {
-      mouse.x = -1000;
-      mouse.y = -1000;
-    };
-    window.addEventListener("mousemove", handleMouseMove);
-    window.addEventListener("mouseleave", handleMouseLeave);
-
-    // Initialize 70 high-precision cyber constellation nodes
-    const nodeCount = Math.min(Math.floor((width * height) / 16000), 75);
-    const nodes: Node[] = [];
-    const colors = ["#6366f1", "#8b5cf6", "#06b6d4", "#10b981", "#c084fc"];
-
-    for (let i = 0; i < nodeCount; i++) {
-      nodes.push({
-        x: Math.random() * width,
-        y: Math.random() * height,
-        vx: (Math.random() - 0.5) * 0.75,
-        vy: (Math.random() - 0.5) * 0.75,
-        radius: Math.random() * 2 + 1.2,
-        color: colors[Math.floor(Math.random() * colors.length)],
-      });
-    }
-
-    const render = () => {
-      ctx.clearRect(0, 0, width, height);
-
-      // Update and draw nodes
-      for (let i = 0; i < nodes.length; i++) {
-        const node = nodes[i];
-        node.x += node.vx;
-        node.y += node.vy;
-
-        // Bounce off canvas boundaries
-        if (node.x < 0 || node.x > width) node.vx *= -1;
-        if (node.y < 0 || node.y > height) node.vy *= -1;
-
-        // Mouse attraction/repulsion interaction
-        const dxMouse = mouse.x - node.x;
-        const dyMouse = mouse.y - node.y;
-        const distMouse = Math.sqrt(dxMouse * dxMouse + dyMouse * dyMouse);
-        if (distMouse < mouse.radius) {
-          const force = (mouse.radius - distMouse) / mouse.radius;
-          node.x -= (dxMouse / distMouse) * force * 1.5;
-          node.y -= (dyMouse / distMouse) * force * 1.5;
-        }
-
-        // Draw individual glowing node
-        ctx.beginPath();
-        ctx.arc(node.x, node.y, node.radius, 0, Math.PI * 2);
-        ctx.fillStyle = node.color;
-        ctx.shadowBlur = 8;
-        ctx.shadowColor = node.color;
-        ctx.fill();
-        ctx.shadowBlur = 0; // reset
-
-        // Draw connecting neural network lines between nearby nodes
-        for (let j = i + 1; j < nodes.length; j++) {
-          const node2 = nodes[j];
-          const dx = node.x - node2.x;
-          const dy = node.y - node2.y;
-          const dist = Math.sqrt(dx * dx + dy * dy);
-
-          if (dist < 135) {
-            ctx.beginPath();
-            ctx.moveTo(node.x, node.y);
-            ctx.lineTo(node2.x, node2.y);
-            const alpha = (1 - dist / 135) * 0.28;
-            ctx.strokeStyle = `rgba(99, 102, 241, ${alpha})`;
-            ctx.lineWidth = 1;
-            ctx.stroke();
-          }
-        }
-
-        // Connect nodes directly to cursor if within telemetry radius
-        if (distMouse < 150) {
-          ctx.beginPath();
-          ctx.moveTo(node.x, node.y);
-          ctx.lineTo(mouse.x, mouse.y);
-          const alphaMouse = (1 - distMouse / 150) * 0.45;
-          ctx.strokeStyle = `rgba(6, 182, 212, ${alphaMouse})`;
-          ctx.lineWidth = 1.2;
-          ctx.stroke();
-        }
-      }
-
-      animationFrameId = requestAnimationFrame(render);
-    };
-
-    render();
-
-    return () => {
-      cancelAnimationFrame(animationFrameId);
-      window.removeEventListener("resize", handleResize);
-      window.removeEventListener("mousemove", handleMouseMove);
-      window.removeEventListener("mouseleave", handleMouseLeave);
-    };
-  }, []);
-
   return (
-    <section className="relative min-h-[92vh] pt-36 pb-24 flex flex-col justify-center items-center overflow-hidden px-4 lg:px-8 ambient-mesh-bg">
-      {/* 1. Animated Drifting Aurora Mesh Blobs */}
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[650px] h-[360px] bg-gradient-to-tr from-indigo-600/22 via-purple-600/18 to-cyan-500/12 rounded-full blur-[140px] pointer-events-none animate-aurora-1" />
-      <div className="absolute top-1/3 left-1/3 w-[500px] h-[300px] bg-gradient-to-bl from-cyan-500/15 via-indigo-500/15 to-transparent rounded-full blur-[130px] pointer-events-none animate-aurora-2" />
-
-      {/* 2. Interactive Cyber Constellation Canvas Field */}
-      <canvas
-        ref={canvasRef}
-        className="absolute inset-0 pointer-events-none z-0 opacity-85"
-      />
-
-      {/* 3. High-Precision Institutional Content Overlay (z-10) */}
+    <section className="relative min-h-[92vh] pt-36 pb-24 flex flex-col justify-center items-center overflow-hidden px-4 lg:px-8">
+      {/* High-Precision Institutional Content Overlay */}
       <div className="relative z-10 max-w-5xl mx-auto text-center flex flex-col items-center gap-6">
         {/* Sleek Announcement Pill */}
         <motion.div
           initial={{ opacity: 0, y: 15 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full iaas-panel border border-white/10 text-gray-300 text-xs font-sans shadow-xl"
+          className="inline-flex items-center gap-2.5 px-4.5 py-1.5 rounded-full iaas-panel border border-white/15 text-gray-300 text-xs font-sans shadow-2xl"
         >
           <span className="w-2 h-2 rounded-full bg-indigo-500 animate-pulse" />
-          <span className="font-semibold text-white">Lumina Cloud OS</span>
+          <span className="font-bold text-white tracking-wide">Lumina Cloud OS</span>
           <span className="text-gray-500 font-mono">&bull;</span>
-          <span className="text-indigo-400 font-mono text-[11px]">Sovereign AI Infrastructure v1.4.0</span>
+          <span className="text-indigo-400 font-mono text-[11px] font-semibold">Sovereign AI Infrastructure v1.4.0</span>
         </motion.div>
 
-        {/* Main Headline in Outfit Font */}
+        {/* Main Headline with Refined, Crisp Font Weight (Not Overly Heavy!) */}
         <motion.h1
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, delay: 0.1 }}
-          className="text-4xl sm:text-6xl lg:text-7xl font-heading font-extrabold tracking-tight leading-[1.06] text-white max-w-4xl drop-shadow-sm"
+          className="text-4xl sm:text-6xl font-sans font-extrabold tracking-tight leading-[1.08] text-white max-w-4xl drop-shadow-sm"
         >
           Quantitative AI &amp; Financial <br className="hidden sm:inline" />
-          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-cyan-300">
+          <span className="text-transparent bg-clip-text bg-gradient-to-r from-indigo-400 via-purple-300 to-cyan-300 font-bold">
             Infrastructure OS
           </span>
         </motion.h1>
 
-        {/* Subtitle in Inter Font */}
+        {/* Subtitle in Crisp Inter Sans */}
         <motion.p
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -201,7 +58,7 @@ export default function HeroSection({ setActiveTab }: HeroSectionProps) {
         >
           <button
             onClick={() => setActiveTab("fintech")}
-            className="flex items-center gap-2 px-6.5 py-3.5 rounded-full bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-xl shadow-indigo-600/30 group hover:scale-[1.02]"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-semibold text-xs sm:text-sm transition-all shadow-xl shadow-indigo-600/30 group hover:scale-[1.03] border border-indigo-400/30"
           >
             <Zap className="w-4 h-4 text-indigo-200" />
             <span>Launch Valuation Engine</span>
@@ -210,7 +67,7 @@ export default function HeroSection({ setActiveTab }: HeroSectionProps) {
 
           <button
             onClick={() => setActiveTab("lending")}
-            className="flex items-center gap-2 px-6.5 py-3.5 rounded-full iaas-panel text-gray-300 hover:text-white font-semibold text-xs sm:text-sm border border-white/10 hover:border-white/20 transition-all shadow-md hover:scale-[1.02]"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-full iaas-panel text-gray-200 hover:text-white font-semibold text-xs sm:text-sm border border-white/15 hover:border-white/30 transition-all shadow-lg hover:scale-[1.03]"
           >
             <Shield className="w-4 h-4 text-emerald-400" />
             <span>Sovereign Underwriting Protocol</span>
@@ -218,60 +75,107 @@ export default function HeroSection({ setActiveTab }: HeroSectionProps) {
 
           <button
             onClick={() => setActiveTab("career")}
-            className="flex items-center gap-2 px-6.5 py-3.5 rounded-full iaas-panel text-gray-300 hover:text-white font-semibold text-xs sm:text-sm border border-white/10 hover:border-white/20 transition-all shadow-md hover:scale-[1.02]"
+            className="flex items-center gap-2 px-7 py-3.5 rounded-full iaas-panel text-gray-200 hover:text-white font-semibold text-xs sm:text-sm border border-white/15 hover:border-white/30 transition-all shadow-lg hover:scale-[1.03]"
           >
             <Terminal className="w-4 h-4 text-cyan-400" />
             <span>Live Telemetry HUD</span>
           </button>
         </motion.div>
 
-        {/* Real-time Telemetry Stats Console Grid in JetBrains Mono */}
+        {/* Refined Holographic Telemetry Cards Grid (Sharp, Balanced Font Weight) */}
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 w-full max-w-4xl mt-16 pt-12 border-t border-white/10 text-left"
+          className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 w-full max-w-5xl mt-16 pt-12 border-t border-white/15 text-left"
         >
-          <div className="iaas-card p-5 rounded-2xl border border-white/10">
-            <span className="text-[11px] font-mono text-gray-400 block mb-1">CAPITAL-DISPATCHED</span>
-            <span className="text-2xl sm:text-3xl font-heading font-extrabold text-white tracking-tight">
+          {/* Card 1: Capital Dispatched */}
+          <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="relative overflow-hidden iaas-card p-6 rounded-2xl border border-white/15 bg-gradient-to-b from-white/[0.04] to-transparent shadow-xl group cursor-pointer"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-indigo-500 via-purple-500 to-transparent" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-mono font-semibold tracking-wider text-indigo-400 uppercase bg-indigo-500/10 px-2 py-0.5 rounded border border-indigo-500/20">
+                DISPATCHED CAPITAL
+              </span>
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
+            </div>
+            <span className="text-3xl font-sans font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-indigo-100 to-indigo-300 block my-1">
               $14.2M+
             </span>
-            <span className="text-[11px] text-emerald-400 font-mono flex items-center gap-1 mt-2">
-              <CheckCircle className="w-3 h-3" />
-              Sovereign Quant Models
-            </span>
-          </div>
+            <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono mt-3">
+              <CheckCircle className="w-3.5 h-3.5" />
+              <span>Sovereign Quant Models</span>
+            </div>
+            <span className="text-[11px] text-gray-400 font-sans block mt-1">10,000+ Monte Carlo DCF simulations verified</span>
+          </motion.div>
 
-          <div className="iaas-card p-5 rounded-2xl border border-white/10">
-            <span className="text-[11px] font-mono text-gray-400 block mb-1">UNDERWRITING-ACCURACY</span>
-            <span className="text-2xl sm:text-3xl font-heading font-extrabold text-white tracking-tight">
+          {/* Card 2: Underwriting Accuracy */}
+          <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="relative overflow-hidden iaas-card p-6 rounded-2xl border border-white/15 bg-gradient-to-b from-white/[0.04] to-transparent shadow-xl group cursor-pointer"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-purple-500 via-pink-500 to-transparent" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-mono font-semibold tracking-wider text-purple-400 uppercase bg-purple-500/10 px-2 py-0.5 rounded border border-purple-500/20">
+                UNDERWRITING PRECISION
+              </span>
+              <span className="w-2 h-2 rounded-full bg-purple-400" />
+            </div>
+            <span className="text-3xl font-sans font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-purple-100 to-pink-300 block my-1">
               99.4%
             </span>
-            <span className="text-[11px] text-indigo-400 font-mono block mt-2">
-              Algorithmic Bias Eliminated
-            </span>
-          </div>
+            <div className="flex items-center gap-1.5 text-xs text-purple-300 font-mono mt-3">
+              <Lock className="w-3.5 h-3.5" />
+              <span>Zero-Knowledge Underwriting</span>
+            </div>
+            <span className="text-[11px] text-gray-400 font-sans block mt-1">Algorithmic bias and career gap anomalies eliminated</span>
+          </motion.div>
 
-          <div className="iaas-card p-5 rounded-2xl border border-white/10">
-            <span className="text-[11px] font-mono text-gray-400 block mb-1">EDGE-TELEMETRY</span>
-            <span className="text-2xl sm:text-3xl font-heading font-extrabold text-white tracking-tight font-mono">
+          {/* Card 3: Edge Telemetry Latency */}
+          <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="relative overflow-hidden iaas-card p-6 rounded-2xl border border-white/15 bg-gradient-to-b from-white/[0.04] to-transparent shadow-xl group cursor-pointer"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-indigo-500 to-transparent" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-mono font-semibold tracking-wider text-cyan-400 uppercase bg-cyan-500/10 px-2 py-0.5 rounded border border-cyan-500/20">
+                EDGE LATENCY SLA
+              </span>
+              <Activity className="w-3.5 h-3.5 text-cyan-400 animate-pulse" />
+            </div>
+            <span className="text-3xl font-mono font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-cyan-100 to-cyan-300 block my-1">
               14ms
             </span>
-            <span className="text-[11px] text-gray-400 font-mono block mt-2">
-              Audio Waveform Ingest
-            </span>
-          </div>
+            <div className="flex items-center gap-1.5 text-xs text-cyan-300 font-mono mt-3">
+              <Terminal className="w-3.5 h-3.5" />
+              <span>Real-Time Waveform HUD</span>
+            </div>
+            <span className="text-[11px] text-gray-400 font-sans block mt-1">Sub-second compensation equity ingestion</span>
+          </motion.div>
 
-          <div className="iaas-card p-5 rounded-2xl border border-white/10">
-            <span className="text-[11px] font-mono text-gray-400 block mb-1">INSTITUTIONAL-NODES</span>
-            <span className="text-2xl sm:text-3xl font-heading font-extrabold text-white tracking-tight font-mono">
+          {/* Card 4: Institutional Endpoints */}
+          <motion.div
+            whileHover={{ y: -5, scale: 1.02 }}
+            className="relative overflow-hidden iaas-card p-6 rounded-2xl border border-white/15 bg-gradient-to-b from-white/[0.04] to-transparent shadow-xl group cursor-pointer"
+          >
+            <div className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-emerald-500 via-teal-500 to-transparent" />
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[10px] font-mono font-semibold tracking-wider text-emerald-400 uppercase bg-emerald-500/10 px-2 py-0.5 rounded border border-emerald-500/20">
+                INSTITUTIONAL NODES
+              </span>
+              <Cpu className="w-3.5 h-3.5 text-emerald-400" />
+            </div>
+            <span className="text-3xl font-mono font-bold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-white via-emerald-100 to-teal-300 block my-1">
               520+
             </span>
-            <span className="text-[11px] text-emerald-400 font-mono block mt-2">
-              Connected Capital Pools
-            </span>
-          </div>
+            <div className="flex items-center gap-1.5 text-xs text-emerald-400 font-mono mt-3">
+              <CheckCircle className="w-3.5 h-3.5" />
+              <span>Active Capital Pools</span>
+            </div>
+            <span className="text-[11px] text-gray-400 font-sans block mt-1">Automated multi-sig smart escrow dispatch</span>
+          </motion.div>
         </motion.div>
       </div>
     </section>
