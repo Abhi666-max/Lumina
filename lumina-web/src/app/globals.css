@@ -30,19 +30,37 @@ h1, h2, h3, h4, .font-heading {
   font-family: var(--font-heading), system-ui, sans-serif;
 }
 
-/* Breathtaking Ambient Deep Space Background Mesh */
+/* Breathtaking Animated Aurora Background Keyframes */
+@keyframes auroraDrift1 {
+  0% { transform: translate(-50%, -50%) scale(1) rotate(0deg); }
+  33% { transform: translate(-45%, -42%) scale(1.15) rotate(120deg); }
+  66% { transform: translate(-53%, -55%) scale(0.95) rotate(240deg); }
+  100% { transform: translate(-50%, -50%) scale(1) rotate(360deg); }
+}
+
+@keyframes auroraDrift2 {
+  0% { transform: translate(0%, 0%) scale(1) rotate(0deg); }
+  50% { transform: translate(12%, -15%) scale(1.2) rotate(-180deg); }
+  100% { transform: translate(0%, 0%) scale(1) rotate(-360deg); }
+}
+
+.animate-aurora-1 {
+  animation: auroraDrift1 24s infinite linear;
+}
+
+.animate-aurora-2 {
+  animation: auroraDrift2 30s infinite linear;
+}
+
+/* Deep Space Ambient Mesh Background */
 .ambient-mesh-bg {
-  background: 
-    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 45%),
-    radial-gradient(circle at 85% 30%, rgba(139, 92, 246, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 50% 80%, rgba(6, 182, 212, 0.08) 0%, transparent 50%),
-    radial-gradient(circle at 50% 0%, rgba(255, 255, 255, 0.03) 0%, transparent 70%),
-    #09090b;
+  background: #09090b;
+  position: relative;
 }
 
 /* Institutional SaaS & IaaS Glass Cards */
 .iaas-panel {
-  background: rgba(17, 19, 31, 0.75);
+  background: rgba(17, 19, 31, 0.78);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.08);
@@ -50,7 +68,7 @@ h1, h2, h3, h4, .font-heading {
 }
 
 .iaas-card {
-  background: rgba(22, 25, 40, 0.6);
+  background: rgba(22, 25, 40, 0.65);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.06);
@@ -58,25 +76,25 @@ h1, h2, h3, h4, .font-heading {
 }
 
 .iaas-card:hover {
-  background: rgba(30, 34, 54, 0.85);
-  border-color: rgba(99, 102, 241, 0.4);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 32px -8px rgba(99, 102, 241, 0.25);
+  background: rgba(30, 34, 54, 0.88);
+  border-color: rgba(99, 102, 241, 0.45);
+  transform: translateY(-3px);
+  box-shadow: 0 14px 36px -8px rgba(99, 102, 241, 0.3);
 }
 
 /* Floating Glass Pill Navbar */
 .glass-navbar {
-  background: rgba(15, 17, 26, 0.82);
+  background: rgba(15, 17, 26, 0.85);
   backdrop-filter: blur(24px);
   -webkit-backdrop-filter: blur(24px);
   border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.6);
+  box-shadow: 0 8px 32px -4px rgba(0, 0, 0, 0.7);
 }
 
 /* Subtle Dot Grid Overlay */
 .dot-grid-bg {
   background-size: 24px 24px;
-  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-image: radial-gradient(circle, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
 }
 
 /* Clean Form & Slider Controls */
