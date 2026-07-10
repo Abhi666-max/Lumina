@@ -1,0 +1,14 @@
+{
+  "name": "lumina-cloud-os-root",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "cd lumina-web && npm run dev",
+    "build": "cd lumina-web && npm install --legacy-peer-deps && npm run build",
+    "start": "cd lumina-web && npm run start",
+    "lint": "cd lumina-web && npm run lint"
+  },
+  "engines": {
+    "node": ">=18.17.0"
+  }
+}
