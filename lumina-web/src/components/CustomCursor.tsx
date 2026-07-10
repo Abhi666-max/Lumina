@@ -1,16 +1,15 @@
 "use client";
 
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef } from "react";
 
 /**
  * Ultra-fast zero-latency custom circular cursor.
- * Uses direct DOM transforms inside mousemove for 0ms physical latency.
+ * 100% vanilla DOM transforms inside mousemove for exact 0ms physical tracking.
+ * Zero React state updates inside mousemove to guarantee zero re-render lag or queue delays.
  */
 export default function CustomCursor() {
   const cursorDotRef = useRef<HTMLDivElement | null>(null);
   const cursorRingRef = useRef<HTMLDivElement | null>(null);
-  const [isHovering, setIsHovering] = useState(false);
-  const [isClicked, setIsClicked] = useState(false);
 
   useEffect(() => {
     // Hide custom cursor on touch/mobile devices
@@ -18,19 +17,42 @@ export default function CustomCursor() {
       return;
     }
 
-    const onMouseMove = (e: MouseEvent) => {
-      const mouseX = e.clientX;
-      const mouseY = e.clientY;
+    let isHovering = false;
+    let isClicked = false;
 
-      // Apply exact physical coordinates instantly with zero damping or frame delay (0ms latency)
+    const updateCursorDOM = (x: number, y: number) => {
       if (cursorDotRef.current) {
-        cursorDotRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%) scale(${isClicked ? 0.7 : isHovering ? 1.4 : 1})`;
+        const dotScale = isClicked ? 0.7 : isHovering ? 1.4 : 1;
+        cursorDotRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${dotScale})`;
+        
+        if (isHovering) {
+          cursorDotRef.current.style.backgroundColor = "#ffffff";
+          cursorDotRef.current.style.boxShadow = "0 0 14px #ffffff";
+        } else {
+          cursorDotRef.current.style.backgroundColor = "#06b6d4";
+          cursorDotRef.current.style.boxShadow = "0 0 10px #06b6d4";
+        }
       }
 
       if (cursorRingRef.current) {
-        const ringScale = isClicked ? 0.8 : isHovering ? 1.6 : 1;
-        cursorRingRef.current.style.transform = `translate3d(${mouseX}px, ${mouseY}px, 0) translate(-50%, -50%) scale(${ringScale})`;
+        const ringScale = isClicked ? 0.8 : isHovering ? 1.5 : 1;
+        cursorRingRef.current.style.transform = `translate3d(${x}px, ${y}px, 0) translate(-50%, -50%) scale(${ringScale})`;
+        
+        if (isHovering) {
+          cursorRingRef.current.style.borderColor = "#22d3ee";
+          cursorRingRef.current.style.backgroundColor = "rgba(34, 211, 238, 0.12)";
+          cursorRingRef.current.style.boxShadow = "0 0 24px rgba(6, 182, 212, 0.7)";
+        } else {
+          cursorRingRef.current.style.borderColor = "rgba(99, 102, 241, 0.85)";
+          cursorRingRef.current.style.backgroundColor = "transparent";
+          cursorRingRef.current.style.boxShadow = "0 0 18px rgba(99, 102, 241, 0.5)";
+        }
       }
+    };
+
+    const onMouseMove = (e: MouseEvent) => {
+      const x = e.clientX;
+      const y = e.clientY;
 
       // Check hover status against interactive elements
       const target = e.target as HTMLElement;
@@ -44,14 +66,23 @@ export default function CustomCursor() {
           target.closest(".iaas-panel") ||
           target.closest("input"))
       ) {
-        setIsHovering(true);
+        isHovering = true;
       } else {
-        setIsHovering(false);
+        isHovering = false;
       }
+
+      updateCursorDOM(x, y);
     };
 
-    const onMouseDown = () => setIsClicked(true);
-    const onMouseUp = () => setIsClicked(false);
+    const onMouseDown = (e: MouseEvent) => {
+      isClicked = true;
+      updateCursorDOM(e.clientX, e.clientY);
+    };
+
+    const onMouseUp = (e: MouseEvent) => {
+      isClicked = false;
+      updateCursorDOM(e.clientX, e.clientY);
+    };
 
     window.addEventListener("mousemove", onMouseMove, { passive: true });
     window.addEventListener("mousedown", onMouseDown, { passive: true });
@@ -62,35 +93,31 @@ export default function CustomCursor() {
       window.removeEventListener("mousedown", onMouseDown);
       window.removeEventListener("mouseup", onMouseUp);
     };
-  }, [isHovering, isClicked]);
+  }, []); // Run ONLY once on mount, never re-bind or re-render during mousemove!
 
   return (
     <>
-      {/* Outer Glowing Ring (0 Latency Real-time Tracking) */}
+      {/* Outer Glowing Ring (Exact 0ms physical latency, transform explicitly excluded from transition) */}
       <div
         ref={cursorRingRef}
-        className={`fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[99999] transition-colors duration-150 border-2 ${
-          isHovering
-            ? "border-cyan-400 bg-cyan-400/15 shadow-[0_0_24px_rgba(6,182,212,0.7)]"
-            : "border-indigo-400/80 shadow-[0_0_18px_rgba(99,102,241,0.5)]"
-        }`}
+        className="fixed top-0 left-0 w-8 h-8 rounded-full pointer-events-none z-[99999] border-2 border-indigo-400/85"
         style={{
+          pointerEvents: "none",
           willChange: "transform",
           transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
+          transition: "border-color 0.12s ease-out, background-color 0.12s ease-out, box-shadow 0.12s ease-out",
         }}
       />
 
-      {/* Center Quantum Cyber Dot (0 Latency Real-time Tracking) */}
+      {/* Center Quantum Cyber Dot (Exact 0ms physical latency) */}
       <div
         ref={cursorDotRef}
-        className={`fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[99999] transition-colors duration-150 ${
-          isHovering
-            ? "bg-white shadow-[0_0_14px_#ffffff]"
-            : "bg-gradient-to-tr from-cyan-400 via-indigo-400 to-purple-400 shadow-[0_0_10px_#06b6d4]"
-        }`}
+        className="fixed top-0 left-0 w-2 h-2 rounded-full pointer-events-none z-[99999] bg-cyan-400 shadow-[0_0_10px_#06b6d4]"
         style={{
+          pointerEvents: "none",
           willChange: "transform",
           transform: "translate3d(-100px, -100px, 0) translate(-50%, -50%)",
+          transition: "background-color 0.12s ease-out, box-shadow 0.12s ease-out",
         }}
       />
     </>

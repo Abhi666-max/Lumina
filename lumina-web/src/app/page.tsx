@@ -89,10 +89,12 @@ export default function Home() {
         </AnimatePresence>
       </main>
 
-      {/* Footer rendered continuously across ALL screens for institutional completeness */}
-      <div className="relative z-10">
-        <Footer />
-      </div>
+      {/* Footer ONLY visible on landing page (Overview / home tab) per requirement */}
+      {activeTab === "home" && (
+        <div className="relative z-10">
+          <Footer />
+        </div>
+      )}
     </div>
   );
 }
