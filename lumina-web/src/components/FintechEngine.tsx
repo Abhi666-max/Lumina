@@ -90,7 +90,7 @@ export default function FintechEngine() {
   // Executive Dossier Generation & Download Engine (.json & .md)
   const handleDownloadDossier = (format: "json" | "md") => {
     const dossierData = {
-      system: "Lumina Cloud OS - Track 3: ElevateHer",
+      system: "Lumina Cloud OS - Enterprise Valuation Suite",
       timestamp: new Date().toISOString(),
       executionNode: "us-east-quant-01",
       verificationSla: "SOC2 / ZKP Compliant",

@@ -57,7 +57,7 @@ export default function MentorshipSandbox() {
     setTimeout(() => {
       setAuditLogs((prev) => [
         ...prev,
-        "[BIAS-ENGINE] Analyzing algorithmic weight distribution for Track 3 Equitability...",
+        "[BIAS-ENGINE] Analyzing algorithmic weight distribution for Enterprise Equitability...",
         "[QUANT-SLA] Verifying zero-collateral conditions against sovereign trust score...",
       ]);
     }, 700);

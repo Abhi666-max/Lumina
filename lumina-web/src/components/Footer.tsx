@@ -48,7 +48,7 @@ export default function Footer() {
             </span>
           </div>
           <p className="text-xs text-gray-400 leading-relaxed font-normal">
-            High-precision quantitative infrastructure engineered for sovereign financial valuation, alternative data underwriting, and bias-free career telemetry across Track 3: ElevateHer.
+            High-precision quantitative infrastructure engineered for sovereign financial valuation, alternative data underwriting, and bias-free career telemetry across global institutional markets.
           </p>
           <div className="flex items-center gap-2.5 text-xs font-mono text-gray-400 pt-3">
             <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
