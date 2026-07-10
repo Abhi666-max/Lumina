@@ -1,7 +1,8 @@
 "use client";
 
 import React from "react";
-import { Code, GitBranch, ExternalLink, Sparkles, Activity } from "lucide-react";
+import { Shield, Code, GitBranch, ExternalLink, Cpu, Terminal, Layers, Sparkles, Activity } from "lucide-react";
+import { motion } from "framer-motion";
 
 // Crisp inline SVGs for social verification icons (guaranteed 100% reliable)
 const LinkedInIcon = () => (
@@ -24,31 +25,32 @@ const XTwitterIcon = () => (
 
 export default function Footer() {
   return (
-    <footer className="w-full bg-[#09090b]/55 backdrop-blur-2xl border-t border-white/10 mt-28 pt-16 pb-12 px-6 lg:px-12 relative z-10 font-sans">
-      {/* Top Subtle Ambient Glow Line */}
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-2/3 max-w-4xl h-[1px] bg-gradient-to-r from-transparent via-indigo-500/70 to-transparent" />
+    <footer className="relative w-full bg-[#06070a] border-t border-white/10 mt-24 pt-16 pb-12 px-4 lg:px-8 overflow-hidden font-sans">
+      {/* Subtle Background Glow */}
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-3/4 h-[1px] bg-gradient-to-r from-transparent via-indigo-500/50 to-transparent pointer-events-none" />
 
-      {/* Main 4-Column Linear/Vercel Clean Grid (No Clunky Boxes!) */}
-      <div className="max-w-6xl mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-14 pb-14">
-        {/* Column 1: Brand & Core SLA Status (Col-span 4) */}
-        <div className="lg:col-span-4 flex flex-col justify-between space-y-5">
-          <div>
-            <div className="flex items-center gap-3 mb-3.5">
-              <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-[1.5px] shadow-sm">
-                <div className="w-full h-full bg-[#09090b] rounded-xl flex items-center justify-center font-sans font-black text-indigo-300 text-xs">
-                  L/C
-                </div>
+      <div className="max-w-7xl mx-auto flex flex-col md:flex-row items-start justify-between gap-12 pb-12 border-b border-white/10 relative z-10">
+        {/* Brand & Infrastructure Vision */}
+        <div className="max-w-md">
+          <div className="flex items-center gap-3 mb-4">
+            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-indigo-600 via-purple-600 to-cyan-400 p-[1.5px] shadow-lg shadow-indigo-500/20">
+              <div className="w-full h-full bg-[#09090b] rounded-full flex items-center justify-center">
+                <span className="font-heading font-black text-xs bg-gradient-to-tr from-white to-indigo-300 bg-clip-text text-transparent">
+                  L
+                </span>
               </div>
-              <span className="text-xl font-sans font-extrabold tracking-tight text-white">
-                Lumina Cloud OS
-              </span>
             </div>
-            <p className="text-xs sm:text-sm text-gray-400 leading-relaxed font-normal">
-              Sovereign quantitative AI valuation, multi-agent financial modeling, and zero-knowledge underwriting infrastructure.
-            </p>
+            <span className="text-xl font-heading font-black tracking-tight bg-gradient-to-r from-white via-indigo-100 to-violet-300 bg-clip-text text-transparent">
+              Lumina Cloud OS
+            </span>
+            <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-full bg-indigo-500/10 text-indigo-400 border border-indigo-500/20">
+              Enterprise Cluster
+            </span>
           </div>
-
-          <div className="flex items-center gap-2.5 text-xs font-mono text-gray-400 pt-2">
+          <p className="text-xs text-gray-400 leading-relaxed font-normal">
+            High-precision quantitative infrastructure engineered for sovereign financial valuation, alternative data underwriting, and bias-free career telemetry across Track 3: ElevateHer.
+          </p>
+          <div className="flex items-center gap-2.5 text-xs font-mono text-gray-400 pt-3">
             <span className="flex items-center gap-1.5 text-emerald-400 font-medium">
               <Activity className="w-3.5 h-3.5 animate-pulse" />
               All Systems Operational
@@ -58,77 +60,46 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Column 2: Platform Modules (Col-span 3) */}
-        <div className="lg:col-span-3 flex flex-col gap-2.5 text-sm">
-          <span className="text-[11px] font-mono font-bold tracking-wider text-indigo-400 uppercase mb-1">
-            Platform Modules
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Quantitative DCF Engine
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Sovereign Underwriting Protocol
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Real-Time Telemetry HUD
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Edge IaaS Code Sandbox
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Zero-Knowledge Verification
-          </span>
-        </div>
+        {/* System Telemetry & Regional Status */}
+        <div className="grid grid-cols-2 sm:grid-cols-3 gap-8 text-xs font-sans">
+          <div className="flex flex-col gap-2.5">
+            <span className="font-bold text-white tracking-wider uppercase text-[11px] font-heading">System Status</span>
+            <span className="text-gray-300 flex items-center gap-2 font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
+              API Gateway: <strong className="text-emerald-400">100%</strong>
+            </span>
+            <span className="text-gray-300 flex items-center gap-2 font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
+              Quant Nodes: <strong className="text-white">48 Active</strong>
+            </span>
+            <span className="text-gray-300 flex items-center gap-2 font-mono">
+              <span className="w-2 h-2 rounded-full bg-emerald-400 animate-pulse shadow-sm shadow-emerald-400/50" />
+              Telemetry HUD: <strong className="text-indigo-400">Online</strong>
+            </span>
+          </div>
 
-        {/* Column 3: Security & Compliance Specs (Col-span 3) */}
-        <div className="lg:col-span-3 flex flex-col gap-2.5 text-sm">
-          <span className="text-[11px] font-mono font-bold tracking-wider text-indigo-400 uppercase mb-1">
-            Security &amp; Compliance
-          </span>
-          <span className="text-gray-400 py-0.5 flex items-center justify-between pr-4">
-            <span>Algorithmic Bias:</span>
-            <span className="text-emerald-400 font-mono font-medium text-xs">0.00% Anomaly</span>
-          </span>
-          <span className="text-gray-400 py-0.5 flex items-center justify-between pr-4">
-            <span>Execution Latency:</span>
-            <span className="text-cyan-400 font-mono font-medium text-xs">&lt; 14.2ms</span>
-          </span>
-          <span className="text-gray-400 py-0.5 flex items-center justify-between pr-4">
-            <span>Cryptography:</span>
-            <span className="text-indigo-300 font-mono font-medium text-xs">ZK-SNARKs</span>
-          </span>
-          <span className="text-gray-400 py-0.5 flex items-center justify-between pr-4">
-            <span>Smart Escrow:</span>
-            <span className="text-gray-300 font-mono font-medium text-xs">Multi-Sig EVM</span>
-          </span>
-        </div>
+          <div className="flex flex-col gap-2.5">
+            <span className="font-bold text-white tracking-wider uppercase text-[11px] font-heading">Architecture</span>
+            <span className="text-gray-400 hover:text-white transition-colors cursor-pointer">Sovereign Escrow Protocol</span>
+            <span className="text-gray-400 hover:text-white transition-colors cursor-pointer">Multi-Agent Quant Pipelines</span>
+            <span className="text-gray-400 hover:text-white transition-colors cursor-pointer">Alternative Underwriting</span>
+          </div>
 
-        {/* Column 4: Resources & Topology (Col-span 2) */}
-        <div className="lg:col-span-2 flex flex-col gap-2.5 text-sm">
-          <span className="text-[11px] font-mono font-bold tracking-wider text-indigo-400 uppercase mb-1">
-            Resources
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Cluster Topology
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Underwriting Specs
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Telemetry SLAs
-          </span>
-          <span className="text-gray-400 hover:text-white transition-colors cursor-pointer py-0.5">
-            Sovereign Nodes
-          </span>
+          <div className="flex flex-col gap-2.5 col-span-2 sm:col-span-1">
+            <span className="font-bold text-white tracking-wider uppercase text-[11px] font-heading">Compliance</span>
+            <span className="text-gray-400 flex items-center gap-1.5"><Sparkles className="w-3 h-3 text-cyan-400" /> Zero Knowledge (ZKP)</span>
+            <span className="text-gray-400">SOC2 Type II Compatible</span>
+            <span className="text-gray-400">End-to-End Encryption</span>
+          </div>
         </div>
       </div>
 
-      {/* SLEEK, UNIFIED HORIZONTAL EXECUTIVE FOUNDER SIGNATURE BAR & SOCIAL PILLS (NO GIANT SEPARATE CARDS!) */}
-      <div className="max-w-6xl mx-auto pt-8 border-t border-white/10 flex flex-col md:flex-row items-center justify-between gap-6">
-        {/* Left: Clean Architectural Signature (Unified directly into the bar!) */}
+      {/* SLEEK, UNIFIED HORIZONTAL EXECUTIVE FOUNDER SIGNATURE BAR & SOCIAL PILLS */}
+      <div className="max-w-7xl mx-auto pt-8 flex flex-col md:flex-row items-center justify-between gap-6 relative z-10">
+        {/* Left: Clean Architectural Signature */}
         <div className="flex items-center gap-3 text-xs sm:text-sm text-gray-300">
-          <div className="w-7 h-7 rounded-lg bg-amber-400/10 border border-amber-400/30 flex items-center justify-center flex-shrink-0">
-            <Sparkles className="w-3.5 h-3.5 text-amber-400" />
+          <div className="w-7 h-7 rounded-lg bg-indigo-500/10 border border-indigo-500/30 flex items-center justify-center flex-shrink-0">
+            <Sparkles className="w-3.5 h-3.5 text-indigo-400" />
           </div>
           <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
             <span className="font-semibold text-white tracking-normal">
@@ -143,6 +114,11 @@ export default function Footer() {
 
         {/* Right: Minimalist Glass Pill Social Verification Links */}
         <div className="flex flex-wrap items-center gap-2.5 text-xs font-medium">
+          <span className="flex items-center gap-1.5 text-gray-300 font-medium bg-emerald-500/10 px-3 py-1.5 rounded-full border border-emerald-500/20 mr-2">
+            <Shield className="w-3.5 h-3.5 text-emerald-400" />
+            <span className="text-emerald-400 font-bold">Zero Bias Verified</span>
+          </span>
+
           <a
             href="https://www.linkedin.com/in/abhijeet-kangane/"
             target="_blank"
@@ -190,7 +166,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Copyright */}
-      <div className="max-w-6xl mx-auto mt-6 pt-4 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-500 font-mono gap-3">
+      <div className="max-w-7xl mx-auto mt-6 pt-4 border-t border-white/5 flex flex-col sm:flex-row items-center justify-between text-[11px] text-gray-500 font-mono gap-3 relative z-10">
         <div className="flex items-center gap-2">
           <Code className="w-3.5 h-3.5 text-indigo-400" />
           <span>&copy; 2026 Lumina Cloud OS. Sovereign Quantitative Platform.</span>
